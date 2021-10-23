@@ -24,38 +24,52 @@ namespace Tests.PlayMode
             yield return LoadTargetScene(TargetScene);
             var activeScene = SceneManager.GetActiveScene();
             var rootGameObjects = activeScene.GetRootGameObjects();
-            var levelDetected = false;
+            var detected = false;
 
             foreach (var gameObject in rootGameObjects)
             {
                 // Find a level game object
                 if (gameObject.name == "Level")
                 {
-                    levelDetected = true;
+                    detected = true;
                 }
             }
 
-            Assert.IsTrue(levelDetected);
+            Assert.IsTrue(detected);
         }
 
         [UnityTest]
         public IEnumerator PlayerSeeACharacterTheyCanControl()
         {
             yield return LoadTargetScene(TargetScene);
-            var activeScene = SceneManager.GetActiveScene();
-            var rootGameObjects = activeScene.GetRootGameObjects();
-            var levelDetected = false;
+            var sut = SceneManager.GetActiveScene();
+            var rootGameObjects = sut.GetRootGameObjects();
+            var detected = false;
 
             foreach (var gameObject in rootGameObjects)
             {
                 // Find a level game object
                 if (gameObject.name == "Player")
                 {
-                    levelDetected = true;
+                    detected = true;
                 }
             }
 
-            Assert.IsTrue(levelDetected);
+            Assert.IsTrue(detected);
+        }
+
+        [UnityTest]
+        public IEnumerator CameraFollowsThePlayer()
+        {
+            yield return LoadTargetScene(TargetScene);
+            var player = GameObject.Find("Player");
+            var cameraPosition = Camera.main.transform.position;
+
+            player.transform.position = new Vector3(0, 0, 10);
+
+            yield return new WaitForFixedUpdate();
+            
+            Assert.AreNotEqual(cameraPosition, Camera.main.transform.position);
         }
     }
 }
