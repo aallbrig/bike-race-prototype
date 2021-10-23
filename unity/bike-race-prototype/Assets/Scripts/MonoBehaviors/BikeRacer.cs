@@ -11,7 +11,6 @@ namespace MonoBehaviors
 
     public class BikeRacer : MonoBehaviour
     {
-        public Vector3 Destination => _racer.Destination;
         private IRace _racer;
         private void Start()
         {
